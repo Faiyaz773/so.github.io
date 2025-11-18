@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>I'm Sorry — A Romantic Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#ffdde1;
+      --bg2:#ee9ca7;
+      --card:#ffffff;
+      --accent:#ff6b81;
+      --muted:#6b6b6b;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:Poppins,system-ui,Segoe UI,Roboto,-apple-system,"Helvetica Neue",Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.15), transparent), linear-gradient(135deg,var(--bg1), var(--bg2));
+      display:grid;place-items:center;padding:3rem;
+    }
+    .card{
+      width:min(720px, 92%);
+      background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      border-radius:20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      overflow:hidden;
+      display:flex;
+      gap:1px;
+      transform-origin:center;
+    }
+    .left, .right{padding:2.5rem;flex:1;}
+    .left{
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.25));
+      display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;
+      min-height:320px;
+    }
+    h1{
+      font-family:Playfair Display, serif;
+      margin:0 0 .4rem 0;
+      font-size:2.4rem;color:var(--accent);
+      letter-spacing:0.6px;
+      text-shadow:0 1px 0 rgba(255,255,255,0.6);
+    }
+    .subtitle{color:var(--muted);margin-bottom:1.2rem;font-weight:600}
+    .heart{
+      width:120px;height:120px;margin:1rem 0;display:grid;place-items:center;filter:drop-shadow(0 6px 18px rgba(255,107,129,0.25));
+      transform-origin:center;animation:pulse 1.6s infinite ease-in-out;
+    }
+    @keyframes pulse{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.06)}
+      100%{transform:scale(1)}
+    }
+    .heart svg{width:100%;height:100%}
+    .open-btn{
+      appearance:none;border:0;background:linear-gradient(90deg,var(--accent),#ff8da1);color:white;padding:.7rem 1.1rem;border-radius:999px;font-weight:600;cursor:pointer;font-size:1rem;box-shadow:0 6px 20px rgba(255,107,129,0.18);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .open-btn:active{transform:translateY(1px)}
+
+    .right{
+      display:flex;flex-direction:column;justify-content:center;min-height:320px;background:linear-gradient(180deg, transparent, rgba(0,0,0,0.02));
+    }
+    .note{
+      font-family:'Dancing Script', cursive;font-size:1.8rem;line-height:1.2;margin:0 0 1rem 0;color:#333;
+    }
+    .msg{
+      color:var(--muted);font-size:1rem;line-height:1.6;margin-bottom:1.2rem;padding-right:1rem
+    }
+    .meta{display:flex;gap:.5rem;align-items:center}
+    .from{font-weight:600;color:var(--accent);}
+    /* Hidden message area */
+    .hidden{
+      max-height:0;overflow:hidden;transition:max-height .6s cubic-bezier(.2,.9,.24,1),padding .25s;opacity:0;padding-top:0;
+    }
+    .revealed{max-height:400px;opacity:1;padding-top:1rem}
+    .confetti{position:absolute;inset:0;pointer-events:none}
+    /* small responsive */
+    @media (max-width:720px){
+      .card{flex-direction:column}
+      .left,.right{padding:1.6rem}
+      h1{font-size:1.8rem}
+      .heart{width:90px;height:90px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="article" aria-label="Romantic sorry card">
+    <div class="left">
+      <h1>I'm so sorry</h1>
+      <div class="subtitle">I messed up — and I miss you</div>
+      <div class="heart" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21s-7.333-4.667-9.333-7.333C-0.333 9.333 4.667 4 8.667 6.667 10 7.667 12 9 12 9s2-1.333 3.333-2.333C19.333 4 24.333 9.333 21.333 13.667 19.333 16.333 12 21 12 21z" fill="url(#g)"/>
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#FF6B81"/>
+              <stop offset="1" stop-color="#FF9DA3"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <button class="open-btn" id="openBtn">Open my heart</button>
+    </div>
+    <div class="right">
+      <div class="msg">Hey Nabila — I know I hurt you, and I'm truly sorry. I didn't mean to — my actions didn't show how much you mean to me. If you can forgive me, I'll spend every day making it up to you.</div>
+      <div class="hidden" id="secret">
+        <p class="note">Please forgive me, my love.</p>
+        <p class="msg">I promise to listen, to learn, and to be better. I love you more than words on a screen — you're my person, my calm, my forever. Let me hold you close again.</p>
+        <div class="meta"><span class="from">— Your Love, Faiyaz</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('openBtn');
+    const secret = document.getElementById('secret');
+    let opened = false;
+    btn.addEventListener('click', ()=>{
+      opened = !opened;
+      if(opened){
+        secret.classList.add('revealed');
+        secret.classList.remove('hidden');
+        btn.textContent = 'Close';
+        // small heart pop
+        document.querySelector('.heart').style.animation = 'none';
+        setTimeout(()=> document.querySelector('.heart').style.animation = '', 10);
+      } else {
+        secret.classList.remove('revealed');
+        secret.classList.add('hidden');
+        btn.textContent = 'Open my heart';
+      }
+    });
+
+    // Initialize hidden element correctly for accessibility
+    secret.classList.add('hidden');
+  </script>
+</body>
+</html>
